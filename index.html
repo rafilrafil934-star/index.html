@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi-Say</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">Hi-Say</a>
+        </div>
+        <div class="nav-center">
+            <div class="search-box">
+                <input type="text" placeholder="Поиск историй..." id="search-input">
+                <button class="search-btn">🔍</button>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="upload.html" class="upload-btn">+ Создать</a>
+            <button class="auth-btn" id="auth-btn">Войти</button>
+            <img src="" alt="" class="user-avatar" id="user-avatar" style="display: none;">
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="index.html" class="sidebar-item active">
+                    <span class="sidebar-icon">🏠</span>
+                    <span>Главная</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <span class="sidebar-icon">🔥</span>
+                    <span>Популярное</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <span class="sidebar-icon">📌</span>
+                    <span>Подписки</span>
+                </a>
+                <a href="profile.html" class="sidebar-item">
+                    <span class="sidebar-icon">👤</span>
+                    <span>Мой канал</span>
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Подписки</h3>
+                <div class="subscriptions-list" id="subscriptions-list">
+                    <p class="empty-text">Войдите, чтобы видеть подписки</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Video Feed -->
+        <div class="content-area">
+            <div class="categories">
+                <button class="category-btn active">Все</button>
+                <button class="category-btn">Хоррор</button>
+                <button class="category-btn">Комедия</button>
+                <button class="category-btn">Фэнтези</button>
+                <button class="category-btn">Sci-Fi</button>
+                <button class="category-btn">Драма</button>
+                <button class="category-btn">Приключения</button>
+            </div>
+
+            <div class="video-feed" id="video-feed">
+                <!-- Videos will be loaded here -->
+                <div class="loading">Загрузка...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/feed.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль — Hi-Say</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">Hi-Say</a>
+        </div>
+        <div class="nav-right">
+            <a href="upload.html" class="upload-btn">+ Создать</a>
+            <button class="auth-btn" id="auth-btn">Войти</button>
+            <img src="" alt="" class="user-avatar" id="user-avatar" style="display: none;">
+        </div>
+    </nav>
+
+    <main class="profile-page">
+        <div class="profile-header">
+            <div class="profile-avatar"></div>
+            <div class="profile-info">
+                <h1 id="profile-name">Загрузка...</h1>
+                <p class="profile-email" id="profile-email"></p>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="videos-count">0</span>
+                        <span class="stat-label">видео</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="subscribers-count">0</span>
+                        <span class="stat-label">подписчиков</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-tabs">
+            <button class="tab-btn active">Видео</button>
+            <button class="tab-btn">О персонаже</button>
+        </div>
+
+        <div class="profile-videos" id="profile-videos">
+            <p class="empty-text">Войдите, чтобы увидеть свои видео</p>
+        </div>
+    </main>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Load user profile
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('profile-name').textContent = user.displayName || 'Аноним';
+                document.getElementById('profile-email').textContent = user.email || '';
+                loadUserVideos(user.uid);
+            } else {
+                document.getElementById('profile-name').textContent = 'Гость';
+                document.getElementById('profile-email').textContent = 'Войдите, чтобы увидеть профиль';
+            }
+        });
+
+        function loadUserVideos(userId) {
+            db.collection('videos')
+                .where('authorId', '==', userId)
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then((snapshot) => {
+                    const container = document.getElementById('profile-videos');
+                    document.getElementById('videos-count').textContent = snapshot.size;
+
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p class="empty-text">У вас пока нет видео</p>';
+                        return;
+                    }
+
+                    container.innerHTML = snapshot.docs.map(doc => {
+                        const video = doc.data();
+                        return `
+                            <div class="profile-video-card">
+                                <div class="profile-video-thumb"></div>
+                                <div class="profile-video-info">
+                                    <h3>${video.title}</h3>
+                                    <p>${video.views || 0} просмотров</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                });
+        }
+    </script>
+</body>
+</html>
